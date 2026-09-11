@@ -21,6 +21,7 @@ No solo se convierte en perjuicio, como lo indique antes, para los pacientes, si
 
 Desde una vista de profesionales se debe tener una responsabilidad etica y moral: productos realizados con excelente calidad desde un principio, cubriendo todos los posibles escenarios. No basta solo con que termine a tiempo, si no que no hayan errores silenciosos, que se genere un trabajo limpio, correcto y puntual. En este ambito no se corren los mismos riesgos que en un error de facturacion o algo similar, que solo es un problema de dinero; aqui estamos hablando de daños irreparables en la salud o hasta perder una vida.
 
+
 ## Parte 3 — Peor caso, mejor caso y caso promedio, demostrados en Python
 
 ### 3.1 — Explicación
@@ -41,3 +42,80 @@ Teniendo las graficas ya creadas, podemos comparar con nuestro analisis anterior
 Como vemos en las graficas, hay cierta similitud o apego entre los 3 escenarios hasta antes del tamaño de entrada 1000, aproximadamente en 800. De ahi en adelante, con n mas altos, es que se empieza a ver la diferencia entre los escenarios y la volatilidad que presenta uno comparado con otro.
 
 Tenia sentido mi argumentacion de la parte 3.1, debido a que insertion sort tiene una forma de comparacion hacia atras, esto nos quiere decir que el orden inverso lo obliga a hacer el mayor numero de iteraciones.
+
+
+## Parte 4 — Complejidad de merge sort e insertion sort: cálculo y validación
+
+### 4.1 — Cálculo teórico
+
+### Recurrencia de merge sort
+
+Merge sort divide el arreglo en dos mitades, ordena cada mitad por separado (recursivamente) y luego las combina en una sola lista ordenada. Esto se plantea con la recurrencia:
+
+T(n) = 2T(n/2) + Θ(n)
+
+- El **2** indica que en cada llamada el problema se divide en 2 subproblemas (las dos mitades del arreglo).
+- El **n/2** indica que cada uno de esos subproblemas tiene la mitad del tamaño del arreglo original.
+- El **Θ(n)** es el costo de la mezcla: para combinar las dos mitades ya ordenadas en una sola lista ordenada, hay que recorrer los n elementos una vez.
+
+### Resolución por Método Maestro
+
+La forma general del método maestro es T(n) = aT(n/b) + f(n). Identificamos:
+
+- a = 2 (2 subproblemas)
+- b = 2 (cada subproblema es la mitad del tamaño)
+- f(n) = Θ(n) (costo de la mezcla)
+
+Calculamos n^(log_b a):
+
+log_b a = log₂ 2 = 1
+n^(log_b a) = n^1 = n
+
+Comparamos f(n) contra n^(log_b a):
+
+f(n) = Θ(n) es igual a n^(log_b a) = n
+
+Esto corresponde al **Caso 2** del método maestro: cuando f(n) = Θ(n^(log_b a)), la solución es:
+
+T(n) = Θ(n^(log_b a) · log n)
+
+Como n^(log_b a) = n, entonces:
+
+**T(n) = Θ(n log n)**
+
+### Costo de insertion sort (analisis linea por linea)
+
+Basado en la implementacion de `insertion_sort` en [algoritmos.py](algoritmos.py):
+
+```python
+for i in range(1, len(lista)):        # se ejecuta (n-1) veces
+    actual = lista[i]                  # se ejecuta (n-1) veces
+    j = i - 1                          # se ejecuta (n-1) veces
+    while j >= 0:                      # en el peor caso, se ejecuta i veces
+        comparaciones += 1             # se ejecuta i veces (peor caso)
+        if lista[j] < actual:          # se ejecuta i veces (peor caso)
+            lista[j + 1] = lista[j]    # se ejecuta i veces (peor caso)
+            j -= 1                     # se ejecuta i veces (peor caso)
+        else:
+            break
+    lista[j + 1] = actual              # se ejecuta (n-1) veces
+```
+
+En el peor caso (escenario C, orden inverso), cada elemento en la posicion i tiene que compararse con los i elementos anteriores antes de encontrar su lugar. Sumando el trabajo del bucle interno para cada i desde 1 hasta n-1:
+
+1 + 2 + 3 + ... + (n-1) = (n-1) * n / 2
+
+Esto es una suma que crece proporcional a n², asi que el costo total del algoritmo en el peor caso es:
+
+**O(n²)**
+
+En el mejor caso (escenario B, casi ordenado), el bucle interno `while` se ejecuta una sola vez por cada elemento (una sola comparacion, y como ya esta en orden, hace `break` de inmediato). Esto da un costo de:
+
+**O(n)**
+
+### Tabla de complejidades
+
+| Algoritmo | Mejor caso | Peor caso | Caso promedio |
+|---|---|---|---|
+| Insertion sort | O(n) | O(n²) | O(n²) |
+| Merge sort | O(n log n) | O(n log n) | O(n log n) |
