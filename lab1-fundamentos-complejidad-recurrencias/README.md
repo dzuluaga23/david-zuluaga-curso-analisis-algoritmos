@@ -1,6 +1,8 @@
-**Nombre:** [David Zuluaga Ceballos]
+# Laboratorio evaluativo 01 — Fundamentos, complejidad y recurrencias
 
-### Parte 1 — Analizar el algoritmo antes de comprar hardware
+**David Zuluaga Ceballos**
+
+## Parte 1 — Analizar el algoritmo antes de comprar hardware
 
 Hay que encontrar primero que todo la causa raiz, si sabemos que el algoritmo esta diseñado con cierto patrón, que es un poco mas desactualizado y no cumple con lo requerido, insertion sort no es eficiente en tiempo de ejecución para 1'200.000 registros. Con lo que dices podemos deducir que Tamiza cumple su objetivo de ordenar correctamente pero incumple el rango de tiempo, que algo funcione correctamente no quiere decir que sea lo mas productivo.
 
@@ -9,7 +11,7 @@ Duplicar la velocidad del servidor puede resolver hasta cierta parte, pero inser
 El siaweb del itm hace 1 o 2 años, en las asesorias de matricula para elegir materias de los estudiantes, siempre generaba una sesion demasiado lenta por el alto volumen de estudiantes: eran 26mil en la sesion al mismo tiempo. Esto hacia que muchos estudiantes perdieramos el cupo en materias o grupos que necesitabamos por la alta demora en las peticiones. Lo que yo experimenté en el software fue una mejora muy grande, ya que en el momento es muchisimo mejor y no causa problema al momento de hacer la asesoria, y ese numero en la sesion ha incrementado a aproximadamente 30mil.
 
 
-### Parte 2 — Responsabilidad ambiental y ética de la implementación
+## Parte 2 — Responsabilidad ambiental y ética de la implementación
 
 Analizando un poco mas la situacion y adentrandonos en temas un poco mas algidos: ¿que pasa en el tema ambiental con un servidor encenndido mas tiempo durante muchos años? El gasto energetico que se genera se va llendo en una cadena, porque por ejemplo en nuestro pais la mayor productora de energia es el agua, basado en las hidroelectricas, entonces ademas del gasto energetico se le suma el desgaste hidrico.
 
@@ -19,11 +21,23 @@ No solo se convierte en perjuicio, como lo indique antes, para los pacientes, si
 
 Desde una vista de profesionales se debe tener una responsabilidad etica y moral: productos realizados con excelente calidad desde un principio, cubriendo todos los posibles escenarios. No basta solo con que termine a tiempo, si no que no hayan errores silenciosos, que se genere un trabajo limpio, correcto y puntual. En este ambito no se corren los mismos riesgos que en un error de facturacion o algo similar, que solo es un problema de dinero; aqui estamos hablando de daños irreparables en la salud o hasta perder una vida.
 
-### Parte 3 — Peor caso, mejor caso y caso promedio, demostrados en Python
+## Parte 3 — Peor caso, mejor caso y caso promedio, demostrados en Python
 
-## 3.1 — Explicación
+### 3.1 — Explicación
 
 Teniendo un pensamiento mas critico de los posibles escenarios que son posibles que lleguen a ocurrir dependiendo del canal de origen de los datos para ese dia, para todos los casos tendremos un numero n definido que sea por ejemplo el 5 entonces, el escenario A es el que llega directamente como reciben los datos, es decir de una forma aleatoria, esto es demasiada carga para el servidor, porque debe comparar dato por dato, en un rango muy amplio, cada dato o registro es comparado con todos los menores hasta encontrar su lugar de origen, puede que en algunas partes se encuentren datos muy seguidos entonces eso es bueno pero no en todos se asegura, por todo lo anterior explicado en terminos de tiempo y efectividad este seria el caso promedio y tomando como referencia el n que dimos anteriormente es posible que vengan en el orden menos conveniente para ordenar los datos completamente toque hacer las maximas iteraciones que en ese caso serian 5, ahora abordamos el escenario B que a mi parecer viene siendo el mejor caso debido a que ya tenemos el 98% de los registros ordenados por riesgo, sigue existiendo un 2% sin ordenar que se va automaticmante al final, pero se corre un menor riesgo ya que la mayor parte del trabajo se ha realizado, teniendo en cuenta el n anterior los datos quedan ordenados el principio como se requiere, y al final quedan los quue no se alcanzaron a evaluar, pero seria un riesgo mas minimo comparado con todos los demas, y el ultimo escenario el C es el peor caso ya que los datos vienen ordenados pero ascendentemente, este es el que mas recursos consumiria al momento de reorganizar, porque el ultimo sera el primero y el primero sera el último, hay que invertir el orden completamente, es decir el que mas tiempo gastaria, y nuevamente haciendo un analisis con el n = 5 este si o si obligaria a hacer el maximo de iteraciones posibles, en este caso 5, en general el gran problema aqui es que hay 3 metodos diferentes de obtencion de los datos y tenemos solo un rango de 4 horas, depende del metodo que haya llegado un dia va a corresponder la vida de las personas que esten en los registros de ese dia muy bien donde todos los dias llegara el mejor caso, pero eso no es asegurable esto se convierte en otro problema aun mayor.
 
 Precisamente por esto, para decidir si el algoritmo entra en producción usaria el peor caso, porque es el unico que da una garantia real, si el sistema se diseña pensando en que siempre va a llegar el escenario mas favorable (B) y un dia llega el escenario C, el proceso no alcanzaria a caber en las 4 horas, y eso pondria en riesgo directamente a los pacientes. El peor caso asegura que, pase lo que pase con el canal de origen ese dia, el sistema sigue funcionando dentro del limite.
 
+### 3.2 — Demostración experimental
+
+[código de la Parte 3](parte3_casos.py) — usa las funciones de [algoritmos.py](algoritmos.py) y [datos.py](datos.py).
+
+![Comparaciones de insertion sort](graficas/parte3_comparaciones.png)
+![Tiempo de insertion sort](graficas/parte3_tiempo.png)
+
+Teniendo las graficas ya creadas, podemos comparar con nuestro analisis anteriormente hecho. Nos podemos dar cuenta que efectivamente el caso C de orden inverso era el peor escenario, el B que es el casi ordenado es el mejor escenario, el mas estable sin importar el n, y que el caso promedio era el de orden aleatorio.
+
+Como vemos en las graficas, hay cierta similitud o apego entre los 3 escenarios hasta antes del tamaño de entrada 1000, aproximadamente en 800. De ahi en adelante, con n mas altos, es que se empieza a ver la diferencia entre los escenarios y la volatilidad que presenta uno comparado con otro.
+
+Tenia sentido mi argumentacion de la parte 3.1, debido a que insertion sort tiene una forma de comparacion hacia atras, esto nos quiere decir que el orden inverso lo obliga a hacer el mayor numero de iteraciones.
