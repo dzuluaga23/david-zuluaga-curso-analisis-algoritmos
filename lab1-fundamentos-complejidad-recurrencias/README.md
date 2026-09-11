@@ -2,6 +2,27 @@
 
 **David Zuluaga Ceballos**
 
+## Instrucciones para reproducir el experimento
+
+1. Active el entorno virtual desde la raíz del repositorio:
+```bash
+   source venv/bin/activate
+```
+2. Instale las dependencias:
+```bash
+   pip install -r requirements.txt
+```
+3. Para generar las gráficas de la Parte 3:
+```bash
+   cd lab1-fundamentos-complejidad-recurrencias
+   python parte3_casos.py
+```
+4. Para generar la gráfica de la Parte 4 (cuando esté lista):
+```bash
+   python parte4_complejidad.py
+```
+
+
 ## Parte 1 — Analizar el algoritmo antes de comprar hardware
 
 Hay que encontrar primero que todo la causa raiz, si sabemos que el algoritmo esta diseñado con cierto patrón, que es un poco mas desactualizado y no cumple con lo requerido, insertion sort no es eficiente en tiempo de ejecución para 1'200.000 registros. Con lo que dices podemos deducir que Tamiza cumple su objetivo de ordenar correctamente pero incumple el rango de tiempo, que algo funcione correctamente no quiere decir que sea lo mas productivo.
@@ -47,6 +68,8 @@ Tenia sentido mi argumentacion de la parte 3.1, debido a que insertion sort tien
 ## Parte 4 — Complejidad de merge sort e insertion sort: cálculo y validación
 
 ### 4.1 — Cálculo teórico
+
+[código de la Parte 4](parte4_complejidad.py)
 
 ### Recurrencia de merge sort
 
@@ -119,3 +142,27 @@ En el mejor caso (escenario B, casi ordenado), el bucle interno `while` se ejecu
 |---|---|---|---|
 | Insertion sort | O(n) | O(n²) | O(n²) |
 | Merge sort | O(n log n) | O(n log n) | O(n log n) |
+
+### 4.2 — Validación experimental
+
+![Tiempo de insertion sort vs merge sort](graficas/parte4_tiempo.png)
+
+Viendo la grafica podemos darnos cuenta cual algoritmo le conviene mas a Tamiza, mientras que insertion sort a medida que sube n
+vemos que el tiempo incrementa en un medida muy desproporcional a la necesidad, comparado con el algoritmo mas conveniente
+merge sort, que en la grafica se muestra que se queda casi pegada al eje X, haciendo otra comparacion en el insertion sort cuando
+n = 6000 el tiempo requerido es aproximadamente 0.6s en cambio merge sort es un numero muy cercano a 0s, la mejor opcion es merge sort  porque es muchisimo mas escalable y no es tan inestable con el aumento de datos.
+
+Esto coincide con lo calculado en la parte 4.1, insertion sort al ser una operacion O(n^2) se va a disparar exponencialmente
+hacia arriba con el incremento de datos mientras que merge sort basado en una operacion O(nLog(n)) se mantiene casi estable aprovechando mejor la complejidad de las complicaciones del software, esto mismo argumenta lo que vemos en los numeros mas bajos de la grafica, como son numeros muy bajitos no se nota tanto la diferencia, se empiezan a diferenciar y a coger rumbos muy diferentes entre los 2 metodos en aproximadamente 500 datos
+
+### 4.3 — Concepto técnico a la Secretaría de Salud
+
+Recomendamos de forma explicita e implementacion unica reemplazar el algoritmo actual por Merge Sort. Sabiendo que el canal de origen de los datos cambia sin previo aviso y que el equipo no busca mantener tres implementaciones diferentes, el criterio de decision se baso en la garantia del peor escenario posible. Como medimos en la Parte 3, Insertion Sort en su peor caso (orden inverso) dispara el numero de comparaciones exponencialmente a medida que sube $n$, volviendolo altamente volatil y riesgoso. Merge Sort, en cambio, mantiene un comportamiento estable $O(n \log n)$ sin importar el canal de origen que llegue ese dia, garantizando predictibilidad operativa.
+
+Aclaramos que el siguiente calculo corresponde a una estimacion por extrapolacion de nuestras mediciones experimentales, no a una medicion directa sobre el total de datos.
+
+Tomando los datos medidos en la grafica de la Parte 4 para $n = 6.400$:
+Insertion Sort: tardo aproximadamente 0.65 segundos. Como su complejidad es $O(n^2)$, al escalar el tamaño de entrada por un factor de $K = \frac{1.200.000}{6.400} = 187.5$, el tiempo se multiplica por $K^2 = 35.156,25$. Esto nos da una estimacion de $0.65 \times 35.156,25 \approx 22.851 \text{ segundos}$ (6.34 horas). Por lo tanto, el algoritmo actual no cabe en la ventana operativa de 4 horas.
+Merge Sort: tardo aproximadamente 0.01 segundos para $n = 6.400$. Escalando mediante la relacion $O(n \log n)$, el tiempo estimado para 1.200.000 registros es de aproximadamente 2.7 a 3.5 segundos. Por ende, Merge Sort cumple de sobra con el limite de las 4 horas, procesando la carga en cuestion de segundos.
+
+Respondemos de manera directa que comprar un servidor con el doble de velocidad NO resuelve el problema. Basandonos en la grafica medida en la Parte 4 para $n = 6.400$, reducir el tiempo de Insertion Sort a la mitad pasaria de 0.65s a 0.325s por lote pequeño. Al llevar esto a la extrapolacion de 1.200.000 registros, el tiempo pasaria de 6.34 horas a 3.17 horas. Aunque teoricamente cae por debajo de las 4 horas, deja un margen de error nulo ante picos de datos o procesos concurrentes, manteniendo un costo de hardware recurrente e innecesario. Un cambio algoritmico pasa de horas a segundos sin gastar en infraestructura.
