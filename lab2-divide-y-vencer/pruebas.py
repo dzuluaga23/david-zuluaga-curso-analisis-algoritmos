@@ -36,6 +36,6 @@ for _ in range(30):
     bruta, dyv = ambas(serie)
     assert bruta == dyv
     i, j, s = subarreglo_maximo(serie, 0, n - 1)
-    assert sum(serie[i : j + 1]) == s  
+    assert sum(serie[i:j + 1]) == s
 
 print("Todas las pruebas pasaron")

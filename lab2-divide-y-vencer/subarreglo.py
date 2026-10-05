@@ -44,7 +44,8 @@ def suma_cruzada(
         Una tupla (inicio, fin, suma) del mejor tramo que incluye al
         menos un elemento de cada mitad.
     """
-    # Barrido hacia la izquierda: parte de medio e incluye siempre valores[medio]
+    # Barrido hacia la izquierda: parte de medio
+    # e incluye siempre valores[medio]
     suma = 0
     mejor_izq = valores[medio]
     indice_izq = medio
