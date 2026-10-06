@@ -49,7 +49,7 @@ Muy buen trabajo: un informe completo, con datos propios y código que funciona.
 - Todas las funciones tienen *type hints* y *docstrings*.
 
 **Lo que puede mejorar:**
-- Hay detalles de estilo (PEP 8): un espacio de más antes de los dos puntos en una variable de `merge_sort` y los archivos terminan sin salto de línea final.
+- Hay un detalle de estilo (PEP 8): un espacio de más antes de los dos puntos en una variable de `merge_sort`.
 
 ## 4. Calidad del análisis de las gráficas (18 / 20)
 **Lo que hizo bien:**
@@ -75,4 +75,4 @@ Sí. Los scripts corren sin errores y generan las tres gráficas. Los dos algori
 - Cuando dé un ejemplo propio, diga qué se procesa, cuántos datos hay y qué límite exacto se incumple.
 - Escriba las predicciones de forma separada y para un tamaño general, antes de mostrar resultados.
 - Explique también los resultados que parecen raros con tamaños pequeños.
-- Revise el estilo del código (PEP 8) antes de entregar, incluido el salto de línea final.
+- Revise el estilo del código (PEP 8) antes de entregar.
